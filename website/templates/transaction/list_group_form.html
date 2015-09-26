@@ -1,0 +1,218 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+	<li>Transaction</li>
+	<li>List GroupForm</li>
+{% endblock %}
+
+{% block extra_style %}
+	<style>
+		.tbody-origin td{padding-bottom: 15px!important}
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>List GroupForm</h1>
+	</div>
+	<form method="GET" style="height: 34px; float: right; margin-bottom: 10px">
+		<div class="pull-right" style="padding: 0px; max-width: 250px">
+			<div class="input-group">
+				<input type="text" class="form-control search-query" name="q" placeholder="Search GroupForm..." value="{{ request.GET.q }}">
+				<span class="input-group-btn">
+					<button class="btn btn-purple btn-sm" type="submit">
+						<i class="icon-search icon-on-right bigger-110"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</form>
+	<div class="row">
+		<div class="col-xs-12">
+			{% if not object_list %}
+				<div class="alert fade in alert-warning">
+					<i class="icon-warning-sign orange"></i>
+					There are not any GroupForm in your processing. You can create new GroupForm in <a href="/transaction/group_form_add">here</a>
+				</div>
+			{% else %}
+				<div class="table-responsive" style="min-height: 160px">
+					<table id="table-history" class="table table-bordered" style="margin-bottom: 0px">
+						<thead>
+							<tr>
+								<th class="th-search-column">
+									Name
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="name" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="name"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="name" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="name"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									Description
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="description" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="description"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="description" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="description"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									Html
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="html" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="html"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="html" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="html"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th>Icon</th>
+								<th style="width: 111px">Modify</th>
+							</tr>
+						</thead>
+						<tbody class="tbody-origin">
+							{% for groupform in object_list %}
+								<tr id="groupform-{{ groupform.id }}" class="groupform-element">
+									<td>{{ groupform.name }}</td>
+									<td>{{ groupform.description }}</td>
+									<td>{{ groupform.html }}</td>
+									<td style="text-align: center">
+										{% if groupform.icon %}
+											<span class="profile-picture">
+												<img style="width: 80px" class="editable img-responsive editable-click editable-empty" alt="Icon" src="{{ MEDIA_URL }}{{ groupform.icon }}">
+											</span>
+										{% endif %}
+									</td>
+									<td>
+										<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons action-buttons-{{ groupform.id }}">
+											<a class="green" href="/transaction/group_form_edit/{{ groupform.id }}">
+												<i class="icon-pencil bigger-130"></i>
+											</a>
+											<a id="delete-groupform-{{ groupform.id }}" class="red delete-groupform" href="">
+												<i class="icon-trash bigger-130"></i>
+											</a>
+										</div>
+										<center style="margin-bottom: 10px">
+											<span class="loading-span-{{ groupform.id }}" style="font-size: 12px; display: none;">
+												<img width="20px" src="{% static 'bootstrap/images/loading.gif' %}">
+											</span>
+										</center>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<center class="loading-span" style="margin-top: 20px; display: none">
+						<span style="font-size: 15px">
+							<img width="40px" src="{% static 'bootstrap/images/loading.gif' %}">
+							Please wait...
+						</span>
+					</center>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+		var next_page = 0,
+			has_next = false,
+			items_search = [],
+			is_loading = false,
+			counter = {{ object_list|length }},
+			q = "{{ request.GET.q }}",
+			total_item = {{ total_item }};
+
+		{% if page_obj.has_next %}
+			next_page = {{ page_obj.next_page_number }}
+			has_next = true
+		{% endif %}
+
+		{% if page_obj %}
+			{% for object in page_obj %}
+				obj = {}
+				obj["id"] = {{ object.id }}
+				obj["name"] = "{{ object.name }}"
+				obj["description"] = "{{ object.description }}"
+				obj["html"] = "{{ object.html }}"
+
+				{% if object.icon %}
+					obj["icon"] = "{{ MEDIA_URL }}{{ object.icon }}"
+				{% else %}
+					obj["icon"] = ""
+				{% endif %}
+				items_search.push(obj);
+			{% endfor %}
+		{% endif %}
+	</script>
+	<script src="{% static "bootstrap/js/list_groupform.js" %}"></script>
+	<script src="{% static "bootstrap/js/search-advance.js" %}"></script>
+{% endblock %}

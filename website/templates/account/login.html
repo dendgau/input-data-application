@@ -1,0 +1,133 @@
+{% load staticfiles %}
+{% load url from future %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+	<head>
+		<meta charset="utf-8" />
+		<title>{% block head_title_base %}{% if SITE_NAME %}{{ SITE_NAME }} | {% endif %}{% block head_title %}{% endblock %}{% endblock %}</title>
+		{% block viewport %}
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		{% endblock %}
+
+		{% block style_base %}
+		<link href="{% static "bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+		<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">-->
+		<link href="{% static "bootstrap/css/font-awesome.min.css" %}" rel="stylesheet">
+		<link href="{% static "bootstrap/css/ace.min.css" %}" rel="stylesheet">
+		<link href="{% static "bootstrap/css/ace-rtl.min.css" %}" rel="stylesheet">
+		<link href="{% static "bootstrap/css/ace-skins.min.css" %}" rel="stylesheet">
+		<style>
+			body{
+				font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+				font-size: 12px;
+				line-height: 1.42857143;
+				color: #333;
+			}
+			.alert {
+				margin-bottom: 8px;
+			}
+			.page-content {
+				padding: 20px 20px 20px;
+			}
+			.dropdown-toggle{
+				cursor: pointer;
+			}
+			.errorlist {
+				list-style-type: none;
+				padding: 3px;
+				margin-top: 5px;
+				margin-bottom: 5px;
+				margin-left: 0px;
+				color: red;
+				background-color: pink;
+				font-size: 13px;
+				font-weight:100
+			}
+		</style>
+		{% block extra_style %}{% endblock %}
+		{% endblock %}
+
+		{% block extra_head_base %}
+		{% block extra_head %}{% endblock %}
+		{% endblock %}
+	</head>
+	<body>
+		<img style="height: 100%; width: 100%; position: absolute; top: 0px; left:0px;" src="{% static 'bootstrap/images/bg.jpg' %}">
+		<div>
+			<div class="" style="margin-left: 0px;">
+				<div class="">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container" style="">
+							<div class="center">
+								<h1>
+									<i class="icon-leaf green"></i>
+									<span class="red"></span>
+									<span class="red">Buoctien Application</span>
+								</h1>
+								<h4 class="blue"></h4>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<center>
+										<h4 class="blue lighter bigger" style="padding-bottom:10px">
+											<i class="icon-coffee green"></i>
+											Please Enter Your Information
+										</h4>
+									</center>
+									<form class="" method="POST" action="{% url 'account_login' %}">
+										{% csrf_token %}
+										{{ form.non_field_errors }}
+										<fieldset>
+											<table>
+												<tr>
+													<th style="font-size: 13px">Username: </th>
+													<td class="col-md-10">
+														{{ form.login.errors }}
+														<label class="block clearfix"> <span class="block input-icon input-icon-right"> {% if form.login.value == null %}
+															<input autofocus="autofocus" id="id_login" name="login" placeholder="Username" type="text" class="form-control">
+															{% else %}
+															<input autofocus="autofocus" id="id_login" name="login" placeholder="Username" type="text" class="form-control" value="{{form.login.value}}">
+															{% endif %} <i class="icon-user"></i> </span>
+														</label>
+													</td>
+												</tr>
+												<tr height="60px">
+													<th style="font-size: 13px">Password: </th>
+													<td class="col-md-10">
+														{{ form.password.errors }}
+														<label class="block clearfix"> <span class="block input-icon input-icon-right">
+															<input id="id_password" name="password" type="password" placeholder="Password" class="form-control">
+															<i class="icon-lock"></i> </span>
+														</label>
+													</td>
+												</tr>
+												<tr>
+													<th></th>
+													<td>
+														<div class="row" style="margin-top: 10px">
+															<div class="col-md-12 col-sm-12">
+																<div class="col-md-6 col-sm-12">
+																	<a class="forgot-password-link secondaryAction" href="/accounts/password/reset/">Forget password </a>
+																</div>
+															</div>
+														</div>
+													</td>
+												</tr>
+											</table>
+											<button style="margin-right: 15px; margin-top: 10px" type="submit" class="width-35 pull-right btn btn-sm btn-primary">
+												<i class="icon-key"></i>
+												Login
+											</button>
+										</fieldset>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+

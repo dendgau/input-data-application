@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+	<li>Manage users</li>
+	<li>Set permission for staff</li>
+{% endblock %}
+
+{% block content %}
+	<div class="widget-box">
+		<div class="widget-header header-color-blue2">
+			<h4 class="lighter smaller">Set permission for staff</h4>
+		</div>
+
+		<div class="widget-body">
+			<div class="widget-main padding-8">
+				<input type="hidden" name="user_id" value="{{ request.GET.user }}">
+				<div id="tree1" class="tree tree-selectable">
+				</div>
+				<button style="margin-top: 6px" type="button" class="btn btn-success btn-save-permission">Save change</button>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+	var groupFormsMain;
+
+	$.ajax({
+		url: "permission",
+		type: "GET",
+		data: {"user": $("input[name='user_id']").val(), "action": "ajax_get"},
+		success: function (data) {
+			var groupForms = data.forms_group,
+				html = "";
+			groupFormsMain = groupForms;
+			for (var i=0; i<groupForms.length; i++){
+			 	if (groupForms[i]["forms"].length > 0){
+					if (groupForms[i]["is_selected"]){
+						html += '<div class="tree-folder" items-total="'+groupForms[i]["items_total"]+'" items-selected="'+groupForms[i]["items_selected"]+'">'+
+							'<div id="group-form-'+groupForms[i]["id"]+'" class="tree-item tree-item-parent tree-selected" style="display: block;" index-group="'+i+'">'+
+								'<i id="icon-group-'+groupForms[i]["id"]+'" class="icon-ok"></i>'+
+								'<div class="tree-item-name">'+groupForms[i]["name"]+'</div>'+
+							'</div>';
+					}else{
+						html += '<div class="tree-folder" items-total="'+groupForms[i]["items_total"]+'" items-selected="'+groupForms[i]["items_selected"]+'">'+
+							'<div id="group-form-'+groupForms[i]["id"]+'" class="tree-item tree-item-parent" style="display: block;" index-group="'+i+'">'+
+								'<i id="icon-group-'+groupForms[i]["id"]+'" class="icon-remove"></i>'+
+								'<div class="tree-item-name">'+groupForms[i]["name"]+'</div>'+
+							'</div>';
+					}
+
+					var forms = groupForms[i]["forms"];
+					for (var j=0; j<forms.length; j++){
+						if (forms[j]["is_selected"]){
+							html += '<div class="tree-folder-content">'+
+									'<div id="form-'+forms[j]["id"]+'" group-id="'+groupForms[i]["id"]+'"  class="tree-item tree-item-child tree-selected" style="display: block;" index-form="'+j+'" index-group="'+i+'">'+
+									'<i id="icon-form-'+forms[j]["id"]+'" class="icon-ok"></i>'+
+									'<div class="tree-item-name">'+forms[j]["name"]+'</div>'+
+									'</div>'+
+									'</div>';
+						}else{
+							html += '<div class="tree-folder-content">'+
+									'<div id="form-'+forms[j]["id"]+'" group-id="'+groupForms[i]["id"]+'" class="tree-item tree-item-child" style="display: block;" index-form="'+j+'" index-group="'+i+'">'+
+									'<i id="icon-form-'+forms[j]["id"]+'" class="icon-remove"></i>' +
+									'<div class="tree-item-name">'+forms[j]["name"]+'</div>'+
+									'</div>'+
+									'</div>';
+						}
+					}
+					html += '</div>';
+				}
+			}
+			$("#tree1").html(html);
+		}
+	});
+
+	$("body").on("click", ".tree-item-parent", function(){
+		var treeFolder = $(this).parents(".tree-folder"),
+			groupId = ($(this).attr("id")).split("-")[2],
+			iGroup = $(this).attr("index-group");
+		if ($(this).hasClass("tree-selected")){
+			$("#icon-group-"+groupId).removeClass("icon-ok");
+			$("#icon-group-"+groupId).addClass("icon-remove");
+			$(this).removeClass("tree-selected");
+			treeFolder.attr("items-selected", 0);
+			var treeItems = treeFolder.find(".tree-item-child");
+			treeItems.removeClass("tree-selected");
+			treeItems.find("i").removeClass("icon-ok");
+			treeItems.find("i").addClass("icon-remove");
+			for (var i=0; i<groupFormsMain[iGroup]["forms"].length; i++){
+				groupFormsMain[iGroup]["forms"][i]["is_selected"] = false;
+			}
+		}else{
+			$("#icon-group-"+groupId).removeClass("icon-remove");
+			$("#icon-group-"+groupId).addClass("icon-ok");
+			$(this).addClass("tree-selected");
+			treeFolder.attr("items-selected", parseInt(treeFolder.attr("items-total")));
+			var treeItems = treeFolder.find(".tree-item-child");
+			treeItems.addClass("tree-selected");
+			treeItems.find("i").removeClass("icon-remove");
+			treeItems.find("i").addClass("icon-ok");
+			for (var i=0; i<groupFormsMain[iGroup]["forms"].length; i++){
+				groupFormsMain[iGroup]["forms"][i]["is_selected"] = true;
+			}
+		}
+		return false;
+	})
+
+	$("body").on("click", ".tree-item-child", function(){
+		var formId = ($(this).attr("id")).split("-")[1],
+			groupId = $(this).attr("group-id"),
+			treeFolder = $(this).parents(".tree-folder"),
+			iGroup = $(this).attr("index-group"),
+			iForm = $(this).attr("index-form");
+		if ($(this).hasClass("tree-selected")){
+			$("#icon-form-"+formId).removeClass("icon-ok");
+			$("#icon-form-"+formId).addClass("icon-remove");
+			$(this).removeClass("tree-selected");
+
+			var selectCount = parseInt(treeFolder.attr("items-selected")),
+				totalCount = parseInt(treeFolder.attr("items-total"));
+			if (selectCount == totalCount){
+				var treeParent = $("#group-form-"+groupId);
+				$("#icon-group-"+groupId).removeClass("icon-ok");
+				$("#icon-group-"+groupId).addClass("icon-remove");
+				treeParent.removeClass("tree-selected");
+			}
+			selectCount -= 1;
+			treeFolder.attr("items-selected", selectCount);
+			groupFormsMain[iGroup]["forms"][iForm]["is_selected"] = false;
+		}else{
+			$("#icon-form-"+formId).removeClass("icon-remove");
+			$("#icon-form-"+formId).addClass("icon-ok");
+			$(this).addClass("tree-selected");
+
+			var selectCount = parseInt(treeFolder.attr("items-selected")),
+				totalCount = parseInt(treeFolder.attr("items-total"));
+			if (selectCount == totalCount-1){
+				var treeParent = $("#group-form-"+groupId);
+				$("#icon-group-"+groupId).removeClass("icon-remove");
+				$("#icon-group-"+groupId).addClass("icon-ok");
+				treeParent.addClass("tree-selected");
+			}
+			groupFormsMain[iGroup]["forms"][iForm]["is_selected"] = true;
+			selectCount += 1;
+			treeFolder.attr("items-selected", selectCount);
+		}
+		return false;
+	});
+
+	$("body").on("click", ".btn-save-permission", function(){
+		var postData = [];
+		for (var i=0; i<groupFormsMain.length; i++){
+			var forms = groupFormsMain[i]["forms"];
+			for (var j=0; j<forms.length; j++){
+				postData.push(forms[j]);
+			}
+		}
+		$.ajax({
+			url: "permission",
+			type: "POST",
+			data: {
+				"user": $("input[name='user_id']").val(),
+				"new_permission": JSON.stringify(postData),
+				"action": "ajax_post"
+			},
+			beforeSend: function(xhr, settings){
+				if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+					xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+				}
+			},
+			success: function (data) {
+				location.reload();
+			}
+		});
+		return false;
+	});
+	</script>
+{% endblock %}

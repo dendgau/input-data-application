@@ -1,0 +1,124 @@
+{% extends "uploading/upload_base.html" %}
+{% load upload_tags %}
+
+{% block content_upload %}
+	<div class="alert fade in alert-warning alert-permission-upload" style="display:none">
+		Your company haven't any form! Please, contact administrator.
+	</div>
+	<form id="fileupload" method="post" action="." enctype="multipart/form-data">{% csrf_token %}
+		<!--<div class="ace-file-input ace-file-multiple"><input multiple="" type="file" id="id-input-file-3"><label class="file-label" data-title="Drop files here or click to choose"><span class="file-name" data-title="No File ..."><i class="icon-cloud-upload"></i></span></label><a class="remove" href="#"><i class="icon-remove"></i></a></div>-->
+		<style>
+			.table-file td{
+				vertical-align: middle!important;
+			}
+		</style>
+		<div class="row information-upload" style="display: none">
+			<div class="col-xs-6">
+				<div class="page-header">
+					<h1 style="margin-left: 0px">Information upload</h1>
+				</div>
+				<div class="col-xs-12">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Group Form:</label>
+						<div class="col-sm-9">
+							<select name="group_form" style="width: 50%">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12" style="margin-top: 10px">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Form:</label>
+						<div class="col-sm-9">
+							<select name="form" style="width: 50%">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12" style="margin-top:10px">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Note File:</label>
+						<div class="col-sm-9">
+							<textarea style="width: 100%; height: 100px" name="note" placeholder="Your note..."></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12" style="margin-top:10px">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Select File:</label>
+						<div class="col-sm-9">
+							<div class="row fileupload-buttonbar" style="height: 60px; display: none">
+								<div class="col-lg-12 tool-upload" style="display: none">
+									<span id="choose-file" disabled class="btn btn-success fileinput-button">
+										<i class="glyphicon glyphicon-plus"></i>
+										<span>Add files...</span>
+										<input type="file" name="file" multiple>
+									</span>
+									<button id="start_all" style="display: none"  type="submit" class="btn btn-primary start">
+										<i class="glyphicon glyphicon-upload"></i>
+										<span>Start upload</span>
+									</button>
+									<button id="cancel_all" style="display: none" type="reset" class="btn btn-warning cancel">
+										<i class="glyphicon glyphicon-ban-circle"></i>
+										<span>Cancel upload</span>
+									</button>
+{#									<button type="button" class="btn btn-danger delete">#}
+{#										<i class="glyphicon glyphicon-trash"></i>#}
+{#										<span>Delete</span>#}
+{#									</button>#}
+{#									<input type="checkbox" class="toggle">#}
+									<!-- The loading indicator is shown during file processing -->
+									<span class="fileupload-loading"></span>
+								</div>
+								<!-- The global progress information -->
+								<div class="col-lg-5 fileupload-progress fade" style="display: none">
+									<!-- The global progress bar -->
+									<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+										<div class="progress-bar progress-bar-success" style="width:0%;"></div>
+									</div>
+									<div class="progress-extended">&nbsp;</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="page-header">
+			<h1 style="margin-left: 0px">File upload today</h1>
+		</div>
+
+		<table role="presentation" class="table-file table table-bordered table-upload-today">
+			<thead>
+				<tr>
+					<th>File name</th>
+					<th style="text-align: center">File note</th>
+					<th style="text-align: center">Form name</th>
+					<th style="text-align: center">File size</th>
+					<th style="text-align: center">Upload date</th>
+					<th>Modify</th>
+				</tr>
+			</thead>
+			<tbody class="files"></tbody>
+		</table>
+
+	</form>
+{% upload_js %}
+{% endblock %}
+{% block script_upload %}
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/tmpl.min.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/load-image.min.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/canvas-to-blob.min.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.blueimp-gallery.min.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.iframe-transport.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-process.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-validate.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/jquery.fileupload-ui.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/main.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/locale.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/csrf.js"></script>
+	<script src="{{ STATIC_URL }}jquery-file-upload/js/cors/jquery.xdr-transport.js"></script>
+{% endblock %}

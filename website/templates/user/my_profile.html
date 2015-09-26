@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load url from future %}
+
+<!--
+<form method="post"  action="{{ request.path }}">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Update Edit" />
+</form>
+-->
+
+{% block breadcrumbs %}
+	<li>Manage user</li>
+	{% if form.action.value == "add" %}
+		<li class="active">My account</li>
+	{% else %}
+		<li class="active">Profile</li>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	<style>
+		.form-horizontal .control-label{text-align: left}
+		.page-header{margin: 0 0 20px}
+		.page-header h1{margin-left: 0px}
+		.form-add-user input{width: 100%}
+		.form-add-user textarea{padding:5px; height: 114px; width: 100%}
+		.form-add-user .red{color: red!important}
+		.form-add-user ul.errorlist{
+			list-style: none;
+			padding-left: 10px;
+			background-color: pink;
+			border: thin solid red;
+			margin: 5px 15px 10px 15px;
+		}
+	</style>
+	<div class="row">
+		<form class="form-horizontal form-add-user" method="post"  action="{{ request.path }}">
+			<div class="col-xs-12">
+				<div class="col-xs-6">
+					<div class="page-header">
+						<h1>My Profile</h1>
+					</div>
+					{% csrf_token %}
+					<div class="form-group">
+						{{ form.user_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Username <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.user_name }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.email_address.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Email address <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.email_address }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.first_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">First name <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.first_name }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.last_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Last name <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.last_name }}
+						</div>
+					</div>
+				</div>
+				{{ form.action }}
+				{{ form.user_name_hidden }}
+				{{ form.email_address_hidden }}
+				<div class="clearfix form-actions" style="float:left; width: 100%">
+					<div class="">
+						<button type="submit" class="btn btn-info" type="button">
+							<i class="icon-ok bigger-110"></i>
+							Submit
+						</button>
+
+						&nbsp; &nbsp; &nbsp;
+						<button class="btn" type="reset">
+							<i class="icon-undo bigger-110"></i>
+							Reset
+						</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}

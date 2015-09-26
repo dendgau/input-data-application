@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+	<li>Upload</li>
+	<li class="active">Upload history</li>
+{% endblock %}
+
+{% block extra_style %}
+	<link rel="stylesheet" href="{% static "bootstrap/css/jquery-ui-1.10.3.custom.min.css" %}"/>
+	<link rel="stylesheet" href="{% static "bootstrap/css/datepicker.css" %}" />
+	<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-timepicker.css" %}" />
+	<link rel="stylesheet" href="{% static "bootstrap/css/daterangepicker.css" %}" />
+{% endblock %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>Upload History</h1>
+	</div>
+	<form method="GET" style="height: 34px; float: right; margin-bottom: 10px">
+		<div class="pull-right" style="padding: 0px; max-width: 250px">
+			<div class="input-group">
+				<input type="text" class="form-control search-query" name="q" placeholder="Search File..." value="{{ request.GET.q }}">
+				<span class="input-group-btn">
+					<button class="btn btn-purple btn-sm" type="submit">
+						<i class="icon-search icon-on-right bigger-110"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</form>
+	<div class="row">
+		<div class="col-xs-12">
+			{% if not page_obj %}
+				<div class="alert fade in alert-warning">
+					<i class="icon-warning-sign orange"></i>
+					There are not any file in your history. You can upload your file in <a href="/upload/new/">here</a>
+				</div>
+			{% else %}
+				<div class="table-responsive" style="min-height: 280px">
+					<table class="table table-bordered" id="table-history" style="margin-bottom: 0px">
+						<thead>
+							<tr>
+								<th class="th-search-column" style="text-align: left">
+									Name
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="name" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="name"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="name" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="name"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column" style="text-align: left; width: 10%">
+									Progress
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px; width: 174px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="progress" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="progress"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column" style="text-align: left; width: 25%">
+									Note
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="note" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="note"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="note" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="note"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column" style="text-align: left">
+									Type
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="form" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="form"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="form" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="form"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column" style="text-align: center">
+									Size
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="real_size" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="real_size" action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="real_size" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="real_size"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column" style="text-align: left">
+									Upload date
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-right dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px; font-weight: lighter; font-size: 13px; width: 230px">
+											<li class="li-datepicker">
+												<span class="type-title-date">Date Before <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="upload_date" style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_date_before" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li class="li-datepicker">
+												<span class="type-title-date">On Date <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="upload_date"  style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_on_date" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li class="li-datepicker">
+												<span class="type-title-date">Date After <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="upload_date" style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_date_after" columnname="upload_date" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li><button class="reset-date-time" style="margin-top: 10px" class="" columnname="upload_date">Reset all</button></li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column" style="text-align: left">
+									Process date
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-right dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px; font-weight: lighter; font-size: 13px; width: 230px">
+											<li class="li-datepicker">
+												<span class="type-title-date">Date Before <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="process_date" style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_date_before" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li class="li-datepicker">
+												<span class="type-title-date">On Date <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="process_date"  style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_on_date" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li class="li-datepicker">
+												<span class="type-title-date">Date After <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="process_date" style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_date_after" columnname="process_date" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li><button class="reset-date-time" style="margin-top: 10px" class="" columnname="process_date">Reset all</button></li>
+										</ul>
+									</div>
+								</th>
+								<th style="text-align: left; width: 111px">Modify</th>
+							</tr>
+						</thead>
+						<tbody class="tbody-advance-search"></tbody>
+						<tbody class="tbody-origin">
+							{% for file in new_object_list %}
+								<tr id="file_{{ file.id }}">
+									<td style="text-align: left">{{ file.name }}</td>
+									<td style="text-align: center">
+									{% if file.is_exist_file_tiff %}
+										{% if file.is_finish_process %}
+											<div class="progress" data-percent="{{ file.file_process }}">
+												<div class="progress-bar" style="width:{{ file.progress }}%; background-color: #337ab7"></div>
+											</div>
+										{% else %}
+											<div class="progress" data-percent="{{ file.file_process }}">
+												<div class="progress-bar" style="width:{{ file.progress }}%; background-color: #d9534f"></div>
+											</div>
+										{% endif %}
+									{% else %}
+										<span class="red"><i class='icon-warning-sign'></i> {{ file.file_process }}</span>
+									{% endif %}
+									</td>
+									<td style="text-align: justify">{{ file.note }}</td>
+									<td style="text-align: center">{{ file.form.name }}</td>
+									<td style="text-align: center">{{ file.file.size|filesizeformat }}</td>
+									<td style="text-align: center">
+										<span class="label">{{ file.upload_date }}</span>
+									</td>
+									<td style="text-align: center">
+										<span class="label">{% if file.process_date %}{{ file.process_date }}{% endif %}</span>
+									</td>
+									<td style="text-align: left">
+										{% if not file.is_start_process %}
+											<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons action-buttons-{{ file.id }}">
+												<a class="green" href="/upload/edit/{{ file.id }}">
+													<i class="icon-pencil bigger-130"></i>
+												</a>
+												<a id="delete-file-{{ file.id }}" class="red delete-file" href="">
+													<i class="icon-trash bigger-130"></i>
+												</a>
+											</div>
+											<center style="margin-bottom: 10px">
+												<span class="loading-span-{{ file.id }}" style="font-size: 12px; display: none;">
+													<img width="20px" src="{% static 'bootstrap/images/loading.gif' %}">
+												</span>
+											</center>
+										{% else %}
+											In Process
+										{% endif %}
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<center class="loading-span" style="margin-top: 20px; display: none">
+						<span style="font-size: 15px">
+							<img width="40px" src="{% static 'bootstrap/images/loading.gif' %}">
+							Please wait...
+						</span>
+					</center>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+		var next_page = 0, has_next = false, items_search = [], is_loading = false, counter = {{ new_object_list|length }}, q = "{{ request.GET.q }}";
+		{% if page_obj.has_next %}
+			next_page = {{ page_obj.next_page_number }}
+			has_next = true
+		{% endif %}
+		{% if new_object_list %}
+			{% for object in new_object_list %}
+				obj = {}
+				obj["id"] = {{ object.id }}
+				obj["name"] = "{{ object.name }}"
+				obj["file"] = "{{ object.file.name }}"
+				obj["note"] = "{{ object.note }}"
+				obj["form"] = "{{ object.form.name }}"
+				obj["upload_date"] = "{{ object.upload_date }}"
+
+				obj["user_process"] = "{{ object.user_process }}"
+				obj["file_process"] = "{{ object.file_process }}"
+				obj["progress"] = {{ object.progress }}
+				obj["real_size"] = {{ object.file.size }}
+				obj["size"] = '{{ object.file.size|filesizeformat }}'
+
+				obj["process_date"] = ''
+				{%if  object.process_date %}
+					obj["process_date"] = '{{ object.process_date }}'
+				{% endif %}
+
+				{% if object.is_exist_file_tiff %}
+					obj["is_exist_file_tiff"] = true
+				{% else %}
+					obj["is_exist_file_tiff"] = false
+				{% endif %}
+
+				{% if object.is_finish_process %}
+					obj["is_finish_process"] = true
+				{% else %}
+					obj["is_finish_process"] = false
+				{% endif %}
+
+				{% if object.is_start_process %}
+					obj["is_start_process"] = true
+				{% else %}
+					obj["is_start_process"] = false
+				{% endif %}
+				items_search.push(obj);
+			{% endfor %}
+		{% endif %}
+
+	</script>
+	<script src="{% static "bootstrap/js/list_file_upload.js" %}"></script>
+	<script src="{% static "bootstrap/js/date-time/bootstrap-datepicker.min.js" %}"></script>
+	<script type="text/javascript">
+		jQuery(function($) {
+			$('.date-picker').datepicker({
+				autoclose: true,
+			}).next().on(ace.click_event, function(){
+				$(this).prev().focus();
+			});
+		});
+	</script>
+	<script src="{% static "bootstrap/js/search-advance.js" %}"></script>
+{% endblock %}

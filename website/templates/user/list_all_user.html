@@ -1,0 +1,400 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+	<li>Manage users</li>
+	<li>List all users</li>
+{% endblock %}
+
+{% block extra_style %}
+	<link rel="stylesheet" href="{% static "bootstrap/css/jquery-ui-1.10.3.custom.min.css" %}"/>
+	<link rel="stylesheet" href="{% static "bootstrap/css/datepicker.css" %}" />
+	<link rel="stylesheet" href="{% static "bootstrap/css/bootstrap-timepicker.css" %}" />
+	<link rel="stylesheet" href="{% static "bootstrap/css/daterangepicker.css" %}" />
+{% endblock %}
+
+{% block content %}
+	<div class="page-header">
+		<h1>List all users</h1>
+	</div>
+	<form method="GET" style="height: 34px; float: right; margin-bottom: 10px">
+		<div class="pull-right" style="padding: 0px; max-width: 250px">
+			<div class="input-group">
+				<input type="text" class="form-control search-query" name="q" placeholder="Search user..." value="{{ request.GET.q }}">
+				<span class="input-group-btn">
+					<button class="btn btn-purple btn-sm" type="submit">
+						<i class="icon-search icon-on-right bigger-110"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+	</form>
+	<div class="row">
+		<div class="col-xs-12">
+			{% if not page_obj %}
+				<div class="alert fade in alert-warning">
+					<i class="icon-warning-sign orange"></i>
+					There are not any users in list. You can create new staff in <a href="/user/staff_add/">here</a> or new customer in <a href="/user/customer_admin_add/">here</a>
+				</div>
+			{% else %}
+				<div class="table-responsive" style="min-height: 280px">
+					<table id="table-history" class="table table-bordered" style="margin-bottom: 0px">
+						<thead>
+							<tr>
+								<th class="th-search-column">
+									Username
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="username" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="username"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="username" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="username"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									Email
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="email" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="email"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="email" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="email"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									First name
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="first_name" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="first_name"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="first_name" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="first_name"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									Last name
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="last_name" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="last_name"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="last_name" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="last_name"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									Position
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="position" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="position"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="position" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="position"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									Company
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-left dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px">
+											<li style="margin-bottom: 6px">
+												<a href="#" class="a-sort-keyword" columnname="company" action="sort-asc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet"></i> Sort ascending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li>
+												<a href="#" class="a-sort-keyword" columnname="company"  action="sort-desc" style="color: #262626; padding-left: 0px; padding-right: 0px">
+													<i class="glyphicon glyphicon-sort-by-alphabet-alt"></i> Sort descending
+													<i class="icon-caret-left bigger-110 invisible i-sort-keyword pull-right">&nbsp;</i>
+												</a>
+											</li>
+											<li class="divider"></li>
+											<li>
+												<div class="nav-search form-keyword-column" columnname="company" style="position: static">
+													<form class="form-search" style="font-weight: lighter">
+														<span class="input-icon">
+															<input style="border-radius: 0px!important" type="text" placeholder="Search ..." class="nav-search-input input-keyword-column" columnname="company"  autocomplete="off">
+															<i class="icon-search nav-search-icon"></i>
+														</span>
+													</form>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</th>
+								<th class="th-search-column">
+									Date join
+									<div class="widget-toolbar no-border parent-search-column">
+										<i class="glyphicon glyphicon-triangle-bottom down-arrow-icon open-search-column" data-toggle="dropdown"></i>
+										<ul class="dropdown-menu pull-right dropdown-125 dropdown-caret search-column" style="padding-bottom: 0px; padding:10px; font-weight: lighter; font-size: 13px; width: 230px">
+											<li class="li-datepicker">
+												<span class="type-title-date">Date Before <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="date_joined" style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_date_before" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li class="li-datepicker">
+												<span class="type-title-date">On Date <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="date_joined"  style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_on_date" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li class="li-datepicker">
+												<span class="type-title-date">Date After <i class="icon-caret-left bigger-110 icon-select-date" style="display: none"></i></span>
+												<div class="input-group" style="float:left">
+													<input columnname="date_joined" style="width: 162px;font-size: 13px;font-weight: lighter;" class="form-control date-picker" id="id-date-picker-1" type="text" placeholder="dd/mm/yyyy">
+												</div>
+												<button class="btn btn-purple btn-sm find_date_after" columnname="date_joined" style="float:left">
+													<i class="icon-search icon-on-right bigger-110"></i>
+												</button>
+											</li>
+											<li><button class="reset-date-time" style="margin-top: 10px" class="" columnname="date_joined">Reset all</button></li>
+										</ul>
+									</div>
+								</th>
+								<th style="width: 111px!important">Modify</th>
+							</tr>
+						</thead>
+						<tbody class="tbody-origin">
+							{% for user in new_object_list %}
+								<tr id="user_{{ user.id }}">
+									<td>{{ user.username }}</td>
+									<td>{{ user.email }}</td>
+									<td>{{ user.first_name }}</td>
+									<td>{{ user.last_name }}</td>
+									<td>
+										{% if user.is_staff %}
+											<span style="padding-top: 4px" class="label label-danger arrowed arrowed-in-right">System staff</span>
+										{% elif user.is_customer_superadmin %}
+											<span style="padding-top: 4px" class="label label-warning arrowed-right arrowed-in">Customer admin</span>
+										{% else %}
+											<span style="padding-top: 4px" class="label arrowed-right arrowed-in">Customer staff</span>
+										{% endif %}
+									</td>
+									<td>
+										<span style="padding-top: 4px" class="label label-inverse arrowed">{{ user.company }}</span>
+									</td>
+									<td>{{ user.date_joined }}</td>
+									<td style="width: 111px">
+										<div class="visible-md visible-lg hidden-sm hidden-xs action-buttons action-buttons-{{ user.id }}">
+											{% if user.is_staff %}
+												<a style="cursor: pointer" title="Edit" class="green" href="/user/staff_edit/{{ user.id }}">
+													<i class="icon-pencil bigger-130"></i>
+												</a>
+											{% elif user.is_customer_superadmin %}
+												<a style="cursor: pointer" title="Edit" class="green" href="/user/customer_admin_edit/{{ user.id }}">
+													<i class="icon-pencil bigger-130"></i>
+												</a>
+											{% else %}
+												<a  style="cursor: pointer" title="Edit" class="green" href="/user/customer_staff_edit/{{ user.id }}">
+													<i class="icon-pencil bigger-130"></i>
+												</a>
+											{% endif %}
+											<a style="cursor: pointer" title="Delete" id="delete-user-{{ user.id }}" class="red delete-user" index="{{ forloop.counter }}">
+												<i class="icon-trash bigger-130"></i>
+											</a>
+											{% if user.is_staff %}
+												<a style="cursor: pointer" title="Set permission" href="/user/permission?user={{ user.id }}">
+													<i class="icon-user bigger-130"></i>
+												</a>
+											{% endif %}
+										</div>
+										<center style="margin-bottom: 10px">
+											<span class="loading-span-{{ user.id }}" style="font-size: 12px; display: none;">
+												<img width="20px" src="{% static 'bootstrap/images/loading.gif' %}">
+											</span>
+										</center>
+									</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					<center class="loading-span" style="margin-top: 20px; display: none">
+						<span style="font-size: 15px">
+							<img width="40px" src="{% static 'bootstrap/images/loading.gif' %}">
+							Please wait...
+						</span>
+					</center>
+				</div>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+		var next_page = 0,
+			has_next = false,
+			items_search = [],
+			is_loading = false,
+			counter = {{ new_object_list|length }},
+			q = "{{ request.GET.q }}",
+			total_item = {{ total_item }},
+			item_after_ajax;
+
+		{% if page_obj.has_next %}
+			next_page = {{ page_obj.next_page_number }}
+			has_next = true
+		{% endif %}
+
+		{% if new_object_list %}
+			{% for object in new_object_list %}
+				obj = {}
+				obj["index_array"] = {{ forloop.counter }}
+				obj["id"] = {{ object.id }}
+				obj["username"] = "{{ object.username }}"
+				obj["email"] = "{{ object.email }}"
+				obj["first_name"] = "{{ object.first_name }}"
+				obj["last_name"] = "{{ object.last_name }}"
+				obj["company"] = "{{ object.company }}"
+
+				obj["position"] = "Customer staff";
+				{% if object.is_staff %}
+					obj["is_staff"] = true;
+					obj["position"] = "Staff";
+				{% else %}
+					obj["is_staff"] = false;
+				{% endif %}
+
+				{% if object.is_superuser %}
+					obj["is_superuser"] = true;
+					obj["position"] = "Admin";
+				{% else %}
+					obj["is_superuser"] = false;
+				{% endif %}
+
+				{% if object.is_customer_superadmin %}
+					obj["is_customer_superadmin"] = true;
+					obj["position"] = "Customer admin";
+				{% else %}
+					obj["is_customer_superadmin"] = false;
+				{% endif %}
+
+				obj["date_joined"] = "{{ object.date_joined }}"
+				items_search.push(obj);
+			{% endfor %}
+		{% endif %}
+	</script>
+	<script src="{% static "bootstrap/js/list_all_user.js" %}"></script>
+	<script src="{% static "bootstrap/js/date-time/bootstrap-datepicker.min.js" %}"></script>
+	<script>
+		$('.date-picker').datepicker({
+			autoclose: true,
+		}).next().on(ace.click_event, function(){
+			$(this).prev().focus();
+		});
+	</script>
+	<script src="{% static "bootstrap/js/search-advance.js" %}"></script>
+
+{% endblock %}

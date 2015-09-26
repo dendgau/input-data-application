@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load url from future %}
+
+{% block breadcrumbs %}
+	<li>Transaction</li>
+	<li>Create new Form</li>
+{% endblock %}
+
+{% block extra_style %}
+	<style type="text/css">
+		.form-horizontal .control-label{text-align: left}
+		.multiple-select {width: 250px; line-height: 1.5cm; padding: 3px;}
+		#create-form fieldset div {float: left; width: 30%; clear: none;}
+		#create-form fieldset a {text-decoration: none; font-weight: bold;}
+		.page-header{margin: 0 0 20px}
+		.page-header h1{margin-left: 0px}
+		#create-form input{width: 80%}
+		#create-form .drop-down {width: 30%}
+	</style>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div id="copyformcontainer"></div>
+		<form class="form-horizontal" method="post" name="createform" id="create-form" action="{% url 'create_form' %}">
+			<div class="col-xs-12">
+				<div class="page-header">
+					<h1>Create new Form</h1>
+				</div>
+				<div class="col-xs-8">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Form name:</label>
+						<div class="col-sm-9">
+							<input placeholder="Form name" size="10" name="formname" id="form_name" type="text" value="{{formname}}">
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-8">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">GroupForm:</label>
+						<div class="col-sm-9">
+							<select class="drop-down" name="groupform" id="group_form">
+								{% for groupform in groupforms %}
+								<option value="{{groupform.id}}" {{groupform.selected}}>{{groupform.name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-8">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Company:</label>
+						<div class="col-sm-9">
+							<select class="drop-down" name="comp" id="company">
+								{% for company in companies %}
+								<option value="{{company.id}}" {{company.selected}}>{{company.short_name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-8">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" style="line-height: 27px">Copy template from Form:</label>
+						<div class="col-sm-9">
+							<select class="drop-down" name="fromform" id="from-form">
+								{% for form in forms %}
+									<option value="{{form.id}}" {{form.selected}}>{{form.name}}</option>
+								{% endfor %}
+							</select>
+							<a style="margin-left: 10px; cursor: pointer" id="copyform">CLICK HERE TO COPY</a>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-8">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">
+							<div style="height: 150px">Fields:</div>
+							<br>
+							<div>GroupFields:</div>
+						</label>
+						<div class="col-sm-3">
+							<select style="height: 150px; width: 100%" name="selectfrom" id="select-from" multiple="multiple" size="5" class="multiple-select">
+								{% for field in fields %}
+									<option value="{{field.id}}">{{field.label}}</option>
+								{% endfor %}
+							</select>
+							<br><br>
+							<select style="height: 150px; width: 100%" name="selectgroupfield" id="select-groupfield" size="5">
+								{% for groupfield in groupfields %}
+									<option value="group_{{groupfield.id}}">{{groupfield.name}}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="col-md-2">
+							<center style="height: 310px">
+								<a title="Add" style="margin-top: 80px; padding:2px; width: 90px; margin-left: 2px; font-size: 12px" class="btn btn-success" href="javascript:void(0);" id="btn-add"><span><i class="glyphicon glyphicon-arrow-right"></i></span></a>
+								<br>
+								<a title="Remove" style="padding:2px; width: 90px; margin-top: 11px; font-size: 12px" class="btn btn-danger" href="javascript:void(0);" id="btn-remove"><span><i class="glyphicon glyphicon-arrow-left"></i></span></a>
+								<br>
+								<a title="Move Up" style="padding:2px; width: 90px; margin-top: 11px; font-size: 12px; padding-top: 4px; padding-bottom: 4px" class="btn btn-white" id="btn-up"><span><i class="glyphicon glyphicon-arrow-up"></i></span></a>
+								<br>
+								<a title="Move Down" style="padding:2px; width: 90px; margin-top: 11px; font-size: 12px; padding-top: 4px; padding-bottom: 4px" class="btn btn-white" id="btn-down"><span><i class="glyphicon glyphicon-arrow-down"></i></span></a>
+							</center>
+						</div>
+						<div class="col-md-3">
+							<select style="height: 310px; width: 100%" name="selectto" id="select-to" multiple="multiple" size="5" class="multiple-select">
+								{% for select in selectto %}
+									<option value="{{select.id}}">{{select.label}}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix form-actions" style="float:left; width: 100%">
+					<div class="">
+						<button type="submit" onclick="selectAll();" class="btn btn-info button-submit" type="button">
+							<i class="icon-ok bigger-110"></i>
+							Submit
+						</button>
+
+						&nbsp; &nbsp; &nbsp;
+						<button class="btn" type="reset">
+							<i class="icon-undo bigger-110"></i>
+							Reset
+						</button>
+
+						&nbsp; &nbsp; &nbsp;
+						<span class="loading-span" style="font-size: 14px; display: none"><img width="30px" src="{% static 'bootstrap/images/loading.gif' %}"> Please wait...</span>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+		var arrSelected = [];
+		{% for select in selectto %}
+			arrSelected.push({
+				'name': '{{select.label}}',
+				'value': '{{select.id}}',
+				'selected': false
+			});
+		{% endfor %}
+
+		$('#btn-add').click(function(){
+			unselectItemArraySelect();
+			$('#select-to option:selected').each( function() {
+				$(this)[0].selected = false
+			});
+
+			$('#select-from option:selected').each( function() {
+				arrSelected.push({
+					'name': $(this).text(),
+					'value': $(this).val(),
+					'selected': true
+				});
+				$('#select-to').append("<option selected value='"+$(this).val()+"'>"+$(this).text()+"</option>");
+				$(this).remove();
+			});
+			var is_group_selected = false;
+			$('#select-groupfield option:selected').each( function() {
+				arrSelected.push({
+					'name': $(this).text(),
+					'value': $(this).val(),
+					'selected': true
+				});
+				$('#select-to').append("<option selected value='"+$(this).val()+"'>"+$(this).text()+"</option>");
+				$(this).remove();
+				is_group_selected = true;
+			});
+			if (is_group_selected == true){
+				$("#select-groupfield option").each(function() {
+					$('select-groupfield option[value="'+$(this).val()+'"]').attr("disabled", true);
+				});
+			}
+		});
+		$('#btn-remove').click(function(){
+			$('#select-to option:selected').each( function() {
+				var selectedgroup = this.value;
+				if (selectedgroup.indexOf('group_') >= 0) {
+					$('#select-groupfield').append("<option value='"+$(this).val()+"'>"+$(this).text()+"</option>");
+					var currentIndex = $(this)[0].index;
+					arrSelected.splice(currentIndex, 1);
+					$(this).remove();
+				} else {
+					$('#select-from').append("<option value='"+$(this).val()+"'>"+$(this).text()+"</option>");
+					var currentIndex = $(this)[0].index;
+					arrSelected.splice(currentIndex, 1);
+					$(this).remove();
+				}
+
+			});
+		});
+
+		function selectAll() {
+			var formSubmit = $(".button-submit").parents("form");
+			$(".button-submit").attr("disabled", true);
+			$(".loading-span").show();
+
+			selectBox = document.getElementById("select-to");
+			for (var i = 0; i < selectBox.options.length; i++) {
+				 selectBox.options[i].selected = true;
+			}
+			notselectBox = document.getElementById("select-from");
+			for (var i = 0; i < notselectBox.options.length; i++) {
+				 notselectBox.options[i].selected = false;
+			}
+			groupfieldselectBox = document.getElementById("select-groupfield");
+			for (var i = 0; i < groupfieldselectBox.options.length; i++) {
+				 groupfieldselectBox.options[i].selected = false;
+			}
+
+			formSubmit.submit();
+		}
+
+		document.getElementById("copyform").onclick = function() {
+			var e = document.getElementById("from-form");
+			var form_id = e.options[e.selectedIndex].value;
+
+			var formname = document.getElementById("form_name");
+			var form_name = formname.value;
+
+			var groupform = document.getElementById("group_form");
+			var group_form = groupform.options[groupform.selectedIndex].value;
+
+			var comp = document.getElementById("company");
+			var company = comp.options[comp.selectedIndex].value;
+
+			// create dynamic form and send data
+			var mydiv = document.getElementById('copyformcontainer').innerHTML = '<form id="revisecopyform" method="POST" '
+																				+'action="">'
+																				+'<input name="form_id" type="hidden" value="' + form_id + '" />'
+																				+'<input name="form_name" type="hidden" value="'+ form_name +'" />'
+																				+'<input name="group_form" type="hidden" value="' + group_form + '" />'
+																				+'<input name="company" type="hidden" value="' + company + '" />'
+																				+'</form>';
+			f=document.getElementById('revisecopyform');
+			if(f){
+				f.submit();
+			}
+		  };
+	</script>
+	<script src="{% static "bootstrap/js/add_field_to_form.js" %}"></script>
+
+{% endblock %}

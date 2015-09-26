@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+	<li>Upload</li>
+	<li class="active">New upload</li>
+{% endblock %}
+
+{% block extra_style %}
+	<link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/blueimp-gallery.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui.css">
+	<noscript><link rel="stylesheet" href="{{ STATIC_URL }}jquery-file-upload/css/jquery.fileupload-ui-noscript.css"></noscript>
+{% endblock %}
+
+{% block content %}
+	{% block content_upload %}
+	{% endblock %}
+{% endblock %}
+
+{% block extra_script %}
+	{% block script_upload %}
+	{% endblock %}
+{% endblock %}
+

@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load url from future %}
+
+<!--
+<form method="post"  action="{{ request.path }}">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Update Edit" />
+</form>
+-->
+
+{% block breadcrumbs %}
+	<li>Manage user</li>
+	{% if form.action.value == "add" %}
+		<li class="active">Create new customer</li>
+	{% else %}
+		<li class="active">Edit customer</li>
+	{% endif %}
+{% endblock %}
+
+{% block content %}
+	<style>
+		.form-horizontal .control-label{text-align: left}
+		.page-header{margin: 0 0 20px}
+		.page-header h1{margin-left: 0px}
+		.form-add-user input{width: 100%}
+		.form-add-user textarea{padding:5px; height: 114px; width: 100%}
+		.form-add-user .red{color: red!important}
+		.form-add-user ul.errorlist{
+			list-style: none;
+			padding-left: 10px;
+			background-color: pink;
+			border: thin solid red;
+			margin: 5px 15px 10px 15px;
+		}
+	</style>
+	<div class="row">
+		<form class="form-horizontal form-add-user" method="post"  action="{{ request.path }}">
+			<div class="col-xs-12">
+				<div class="col-xs-6">
+					<div class="page-header">
+						<h1>Customers Information</h1>
+					</div>
+					{% csrf_token %}
+					<div class="form-group">
+						{{ form.user_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Username <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.user_name }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.email_address.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Email address <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.email_address }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.first_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">First name <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.first_name }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.last_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Last name <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.last_name }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.password1.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Password <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.password1 }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.password2.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Re-password <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.password2 }}
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6">
+					<div class="page-header">
+						<h1>
+							Company Information
+						</h1>
+					</div>
+					<div class="form-group">
+						{{ form.company_full_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Company name <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.company_full_name }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form.company_short_name.errors }}
+						<label class="col-sm-3 control-label no-padding-right">Company short name <span class="red">*</span>:</label>
+						<div class="col-sm-9">
+							{{ form.company_short_name }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Company address:</label>
+						<div class="col-sm-9">
+							{{ form.company_address }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Phone No:</label>
+						<div class="col-sm-9">
+							{{ form.company_phone }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">License No:</label>
+						<div class="col-sm-9">
+							{{ form.license_no }}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right">Representative:</label>
+						<div class="col-sm-9">
+							{{ form.representative }}
+						</div>
+					</div>
+				</div>
+				{{ form.action }}
+				{{ form.user_name_hidden }}
+				{{ form.email_address_hidden }}
+				<div class="clearfix form-actions" style="float:left; width: 100%">
+					<div class="">
+						<button class="btn btn-info button-submit-user" type="button">
+							<i class="icon-ok bigger-110"></i>
+							Submit
+						</button>
+
+						&nbsp; &nbsp; &nbsp;
+						<button class="btn" type="reset">
+							<i class="icon-undo bigger-110"></i>
+							Reset
+						</button>
+
+						{% if form.action.value == "edit" %}
+							&nbsp; &nbsp; &nbsp;
+							<button id="delete-user-{{ user_id }}" class="btn btn-danger button-delete-user" type="button">
+								<i class="icon-remove bigger-110"></i>
+								Delete
+							</button>
+						{% endif %}
+
+						&nbsp; &nbsp; &nbsp;
+						<span class="loading-span" style="font-size: 14px; display: none"><img width="30px" src="{% static 'bootstrap/images/loading.gif' %}"> Please wait...</span>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block extra_script %}
+	<script>
+		$(".button-submit-user").click(function(){
+			var formSubmit = $(this).parents("form");
+			$(this).attr("disabled", true);
+			$(".loading-span").show();
+			formSubmit.submit();
+			return false;
+		});
+	</script>
+	{% if form.action.value == "edit" %}
+		<script>
+			$(".button-delete-user").click(function(){
+				if (confirm("Do you want to delete this user?")) {
+					var formSubmit = $(this).parents("form");
+					var user_id = ($(this).attr("id")).split("-")[2];
+					var me = $(this);
+					$(this).attr("disabled", true);
+					$(".loading-span").show();
+					$.ajax({
+						url: "/user/list_all_user",
+						type: "POST",
+						beforeSend: function (xhr, settings) {
+							if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+								xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+							}
+						},
+						data: {"user_id": user_id, "action": "ajax_post"},
+						success: function (data) {
+							window.location.href = "/user/list_all_user";
+						},
+						error: function (request, error) {
+							alert("ERROR: You can not delete this user. Please try again");
+							$(".loading-span").hide();
+							me.removeAttr('disabled');
+						},
+					});
+				}
+				return false;
+			});
+		</script>
+	{% endif %}
+{% endblock %}

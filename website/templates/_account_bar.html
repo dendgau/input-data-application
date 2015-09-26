@@ -1,0 +1,161 @@
+{% load url from future %}
+{% load staticfiles %}
+
+{% if not request.user.is_authenticated %}
+	<ul class="nav navbar-nav navbar-right">
+	    <li><a href="{% url 'account_login' %}">Sign In</a></li>
+	</ul>
+{% else %}
+	<style>
+		.notification-content {margin-bottom: 0px; width: 100%; margin-left: 0px}
+		.notification-content a{width: 12px; color: #dddddd}
+		.notification-content a:hover{width: 12px; color: #dddddd}
+		.notification-content .clearfix{color: #333!important; font-size: 11px}
+		.notification-content li{line-height: 20px!important; margin-top: -20px; padding: 10px; padding-right: 17px; border-bottom: thin solid #ddd}
+		.notification-content .progress{margin: 0px}
+	</style>
+	<div class="navbar-header pull-right" role="navigation">
+		<ul class="nav ace-nav">
+			<li class="green open-notify">
+				<a class="bell_notify" data-toggle="dropdown" class="dropdown-toggle" href="#" style="display: none">
+					<i class="icon-bell-alt icon-animated-bell"></i>
+					<span class="badge badge-success number-notify"></span>
+				</a>
+				{% if request.user.is_staff and not request.user.is_superuser %}
+					<a class="loading-span-notify" style="display: block">
+						<center class="" style="display: block">
+							<span style="font-size: 15px">
+								<img width="30px" src="{% static 'bootstrap/images/loading.gif' %}">
+							</span>
+						</center>
+					</a>
+				{% else %}
+					<a class="loading-span-notify" style="display: none">
+						<center class="" style="display: block">
+							<span style="font-size: 15px">
+								<img width="30px" src="{% static 'bootstrap/images/loading.gif' %}">
+							</span>
+						</center>
+					</a>
+				{% endif %}
+				<ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+					<li class="dropdown-header there-are" style="display: none">
+						<i class="icon-bell-alt icon-animated-bell"></i>
+						There are <span class="number-notify"></span> files
+					</li>
+					<li class="dropdown-header there-are-not" style="display: none">
+						<i class="icon-bell-alt icon-animated-bell"></i>
+						There are not any files
+					</li>
+					<li id="slimtest1">
+						<ul class="notification-content" style="width: 100%">
+{#							<li>#}
+{#								<a href="#">#}
+{#									<div class="clearfix">#}
+{#										<span class="pull-left">Software Update</span>#}
+{#										<span class="pull-right">65%</span>#}
+{#									</div>#}
+{##}
+{#									<div class="progress progress-mini ">#}
+{#										<div style="width:65%" class="progress-bar "></div>#}
+{#									</div>#}
+{#								</a>#}
+{#							</li>#}
+{#							<li>#}
+{#								<a href="#">#}
+{#									<div class="clearfix">#}
+{#										<span class="pull-left">Software Update</span>#}
+{#										<span class="pull-right">65%</span>#}
+{#									</div>#}
+{##}
+{#									<div class="progress progress-mini ">#}
+{#										<div style="width:65%" class="progress-bar "></div>#}
+{#									</div>#}
+{#								</a>#}
+{#							</li>#}
+{#							<li>#}
+{#								<a href="#">#}
+{#									<div class="clearfix">#}
+{#										<span class="pull-left">Software Update</span>#}
+{#										<span class="pull-right">65%</span>#}
+{#									</div>#}
+{##}
+{#									<div class="progress progress-mini ">#}
+{#										<div style="width:65%" class="progress-bar "></div>#}
+{#									</div>#}
+{#								</a>#}
+{#							</li>#}
+{#							<li>#}
+{#								<a href="#">#}
+{#									<div class="clearfix">#}
+{#										<span class="pull-left">Software Update</span>#}
+{#										<span class="pull-right">65%</span>#}
+{#									</div>#}
+{##}
+{#									<div class="progress progress-mini ">#}
+{#										<div style="width:65%" class="progress-bar "></div>#}
+{#									</div>#}
+{#								</a>#}
+{#							</li>#}
+{#							<li>#}
+{#								<a href="#">#}
+{#									<div class="clearfix">#}
+{#										<span class="pull-left">Software Update</span>#}
+{#										<span class="pull-right">65%</span>#}
+{#									</div>#}
+{##}
+{#									<div class="progress progress-mini ">#}
+{#										<div style="width:65%" class="progress-bar "></div>#}
+{#									</div>#}
+{#								</a>#}
+{#							</li>#}
+{#							<li>#}
+{#								<a href="#">#}
+{#									<div class="clearfix">#}
+{#										<span class="pull-left">Software Update</span>#}
+{#										<span class="pull-right">65%</span>#}
+{#									</div>#}
+{##}
+{#									<div class="progress progress-mini ">#}
+{#										<div style="width:65%" class="progress-bar "></div>#}
+{#									</div>#}
+{#								</a>#}
+{#							</li>#}
+						</ul>
+					</li>
+				</ul>
+			</li>
+			<li class="light-blue">
+				<a data-toggle="dropdown" href="#" class="dropdown-toggle" aria-expanded="false">
+					<img class="nav-user-photo" src="/site_media/static/bootstrap/avatars/1081.gif" alt="{{ request.user.last_name }} {{ request.user.first_name }}">
+					<span class="user-info">
+						<small>Welcome,</small>
+						{{ request.user.last_name }} {{ request.user.first_name }}
+					</span>
+					<i class="icon-caret-down"></i>
+				</a>
+				<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+					<li>
+						<a href="/user/profile/">
+							<i class="icon-user"></i>
+							My Profile
+						</a>
+					</li>
+					<li>
+						<a href="/accounts/password/change/">
+							<i class="icon-cog"></i>
+							Reset password
+						</a>
+					</li>
+					<li class="divider"></li>
+					<li>
+						<a href="{% url 'account_logout' %}?next=/accounts/login/">
+							<i class="icon-off"></i>
+							Logout
+						</a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+{% endif %}
